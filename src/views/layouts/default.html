@@ -5,7 +5,7 @@
 
     <navbar router.bind="router" user.bind="user"></navbar>
 
-    <div class="flash" if.bind="flash.hasMessages">${flash.getMessage()}</div>
+    <div class="flash ${flash.getMessage().cssClass} ${flash.hasMessages ? 'flash--showing' : 'flash--hidden'}">${flash.getMessage().text}</div>
 
     <div class="container-fluid">
         <slot name="content"></slot>

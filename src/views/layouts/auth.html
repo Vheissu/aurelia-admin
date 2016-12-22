@@ -1,4 +1,4 @@
 <template>
-    <div class="flash ${flash.getMessage().cssClass}" if.bind="flash.hasMessages">${flash.getMessage().text}</div>
+    <div class="flash ${flash.getMessage().cssClass} ${flash.hasMessages ? 'flash--showing' : 'flash--hidden'}">${flash.getMessage().text}</div>
     <slot name="content"></slot>
 </template>

@@ -27,6 +27,10 @@ export class Flash {
     }
 
     getMessage() {
+        setTimeout(() => {
+            this.currentMessage = '';
+        }, 3000);
+        
         return this.currentMessage;
     }
 
