@@ -1,0 +1,23 @@
+<template>
+    <div slot="content">
+        <h2>Manage Users</h2>
+        <table class="table table-striped table-hover">
+            <thead class="thead-inverse">
+                <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Username</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr repeat.for="user of users">
+                    <th scope="row"><a route-href="route: usersView; params.bind: {id: user.id}">${user.id}</a></th>
+                    <td><a route-href="route: usersView; params.bind: {id: user.id}">${user.name}</a></td>
+                    <td><a route-href="route: usersView; params.bind: {id: user.id}">${user.email}</a></td>
+                    <td><a route-href="route: usersView; params.bind: {id: user.id}">${user.username}</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</template>
