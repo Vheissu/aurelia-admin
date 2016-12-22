@@ -1,0 +1,21 @@
+<template bindable="router">
+    <nav class="navbar navbar-dark bg-primary navbar-fixed-top" role="navigation">
+        <button class="navbar-toggler hidden-lg-up" type="button" data-toggle="collapse" data-target="#navbarcollapse" aria-controls="navbarcollapse" aria-expanded="false" aria-label="Toggle navigation"></button>
+
+        <div class="collapse navbar-toggleable-md" id="navbarcollapse">
+            <a class="navbar-brand" href="#">
+                <i class="fa fa-home"></i>
+                <span>${router.title}</span>
+            </a>
+            <ul class="nav navbar-nav">
+                <li repeat.for="row of router.navigation" class="nav-item ${row.isActive ? 'active' : ''}"><a class="nav-link" href.bind="row.href">${row.title}</a></li>
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+                <li class="loader" if.bind="router.isNavigating">
+                <i class="fa fa-spinner fa-spin fa-2x"></i>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</template>

@@ -1,4 +1,10 @@
 <template>
+    <require from="../partials/navbar.html"></require>
+
+    <style type="text/css">body { padding-top: 65px; }</style>
+
+    <navbar router.bind="router"></navbar>
+
     <div class="container-fluid">
         <slot name="content"></slot>
     </div>
