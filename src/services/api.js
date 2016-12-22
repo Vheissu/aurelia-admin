@@ -24,4 +24,11 @@ export class Api {
     getUser(id) {
         return Promise.resolve(users.filter(user => user.id === Number(id)));
     }
+
+    deleteUser(id) {
+        return new Promise((resolve, reject) => {
+            users = users.filter(user => user.id !== id);
+            resolve(users);
+        });
+    }
 }

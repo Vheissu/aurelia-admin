@@ -1,14 +1,18 @@
 import {inject, observable} from 'aurelia-framework';
 
 import {Api} from '../../../services/api';
-import {Redirect} from 'aurelia-router';
+import {Redirect, Router} from 'aurelia-router';
 
-@inject(Api)
+import $ from 'jquery';
+
+@inject(Api, Router)
 export class View {
     @observable() currentUserFile = null;
 
-    constructor(api) {
+    constructor(api, router) {
         this.api = api;
+        this.router = router;
+
         this.editMode = false;
         this.user = {};
     }
@@ -30,7 +34,12 @@ export class View {
     }
 
     deleteUser() {
-        
+        $('#deleteUserModal').modal('show');
+    }
+
+    deleteUserConfirm() {
+        $('#deleteUserModal').modal('hide');
+        this.api.deleteUser(this.user.id).then(() => this.router.navigateToRoute('users'));
     }
 
     currentUserFileChanged(file) {
