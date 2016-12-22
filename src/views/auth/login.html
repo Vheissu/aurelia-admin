@@ -3,16 +3,22 @@
         <div class="login-background"><img src="/images/background.jpg"></div>
 
         <div class="login-container">
-            <form novalidate="novalidate">
+            <form class="au-animate" novalidate="novalidate" ref="loginForm" submit.delegate="handleFormSubmission()">
                 <div class="form-group form-group-default">
-                    <label>Login</label>
+                    <h3>Login</h3><br>
+                    <div class="row" if.bind="foundAvatar">
+                        <div class="col-sm-6">
+                            <img src.bind="foundAvatar" class="img-fluid img-thumbnail">
+                            <br>
+                            <br>
+                        </div>
+                    </div>
                     <div class="controls">
-                        <input type="text" name="username" placeholder="Username" class="form-control" required="" aria-required="true" aria-invalid="false" value.bind="username">
+                        <input type="text" name="username" placeholder="Username" class="form-control" required="" aria-required="true" aria-invalid="false" value.bind="username" blur.trigger="findUserAvatar()">
                     </div>
                 </div>
 
                 <div class="form-group form-group-default">
-                    <label>Password</label>
                     <div class="controls">
                         <input type="password" class="form-control" name="password" placeholder="Password" required="" aria-required="true" aria-invalid="false" value.bind="password">
                     </div>
