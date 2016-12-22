@@ -1,12 +1,16 @@
-import {inject} from 'aurelia-framework';
+import {inject, observable} from 'aurelia-framework';
 
 import {Api} from '../../../services/api';
 import {Redirect} from 'aurelia-router';
 
 @inject(Api)
 export class View {
+    @observable() currentUserFile = null;
+
     constructor(api) {
         this.api = api;
+        this.editMode = false;
+        this.user = {};
     }
 
     canActivate(params) {
@@ -15,5 +19,25 @@ export class View {
         }
 
         return new Redirect('/dashboard/users');
+    }
+
+    toggleEditMode() {
+        this.editMode = !this.editMode;
+    }
+
+    triggerAvatarChange() {
+        
+    }
+
+    deleteUser() {
+        
+    }
+
+    currentUserFileChanged(file) {
+        let theFile = file.item(0);
+
+        if (theFile) {
+            this.user.image = URL.createObjectURL(theFile);
+        }
     }
 }

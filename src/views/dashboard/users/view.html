@@ -1,6 +1,29 @@
 <template>
-    <div slot="content">
-        ${user.email}
-        <h2>Editing user: ${user.name}</h2>
+    <div class="container" slot="content">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="card">
+                    <div class="card-img-block">
+                        <img class="card-img-top" src.bind="user.image" alt="${user.name}">
+                        <label class="avatar-change" for="avatarUpload" show.bind="editMode"><i class="fa fa-camera" aria-hidden="true"></i></label>
+                        <input type="file" id="avatarUpload" style="display:none;" files.bind="currentUserFile">
+                    </div>
+                    <div class="card-block">
+                        <h4 class="card-title">${user.name}</h4>
+                        <p>${user.email}</p>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><strong>ID</strong><br>${user.id}</li>
+                        <li class="list-group-item"><strong>Username</strong><br><span show.bind="!editMode">${user.username}</span><input type="text" class="form-control" value.bind="user.username" show.bind="editMode"></li>
+                        <li class="list-group-item"><strong>Email</strong><br><span show.bind="!editMode">${user.email}</span><input type="text" class="form-control" value.bind="user.email" show.bind="editMode"></li>
+                    </ul>
+                    <div class="card-block">
+                        <a href="#" click.delegate="saveUser(user)" class="card-link btn btn-primary" if.bind="editMode">Save changes</a>
+                        <a href="#" click.delegate="toggleEditMode()" class="card-link">${editMode ? 'Cancel user edit' : 'Edit user'}</a>
+                        <a href="#" click.delegate="deleteUser()" class="card-link">Delete user</a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
