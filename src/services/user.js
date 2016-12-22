@@ -4,12 +4,18 @@
  * also contains things like permissions and whatnot
  * 
  */
-
+import {inject} from 'aurelia-framework';
+import {Router} from 'aurelia-router';
 import {users, Api} from './api';
+import {Flash} from './flash';
 
+@inject(Flash, Router)
 export class User {
 
-    constructor() {
+    constructor(flash, router) {
+        this.flash = flash;
+        this.router = router;
+
         this.loggedIn = false;
         this.currentUser = {};
     }
@@ -30,11 +36,13 @@ export class User {
         });
     }
 
-    logout() {
+    logout(redirect = 'login') {
         this.loggedIn = false;
         this.currentUser = {};
 
-        return Promise.resolve();
+        this.flash.setMessage('You successfully logged out.');
+
+        this.router.navigateToRoute(redirect);
     }
 
     userCan(permission) {
