@@ -92,7 +92,7 @@ define('services/api',['exports', 'aurelia-framework', 'aurelia-fetch-client'], 
     Object.defineProperty(exports, "__esModule", {
         value: true
     });
-    exports.Api = undefined;
+    exports.Api = exports.users = exports.DEMO_MODE = undefined;
 
     function _classCallCheck(instance, Constructor) {
         if (!(instance instanceof Constructor)) {
@@ -100,9 +100,57 @@ define('services/api',['exports', 'aurelia-framework', 'aurelia-fetch-client'], 
         }
     }
 
-    var DEMO_MODE = true;
+    var DEMO_MODE = exports.DEMO_MODE = true;
 
-    var users = [{ id: 34234, image: '/images/avatars/big-pete-wrigley.jpg', name: 'Big Pete Wrigley', username: 'petewrigley', email: 'bigpete@gmail.com', password: 'superhardpassword123' }, { id: 938493, image: '/images/avatars/tina-carlyle.jpg', name: 'Tina Carlyle', username: 'tina', email: 'tina.carlyle@gmail.com', password: 'ysoserious?' }, { id: 991, image: '/images/avatars/tre-styles.jpg', name: 'Tre Styles', username: 'trestyles123', email: 'trestylessuperfly@gmail.com', password: 'toomuchmoneytocount' }, { id: 1, image: '/images/avatars/cameron-frye.jpg', name: 'Cameron Frye', username: 'cameron', email: 'cameronfrye@frye.com', password: 'kjfkjkdjf' }, { id: 42, image: '/images/avatars/stoney-brown.jpg', name: 'Stoney Brown', username: 'stoney', email: 'stoney@gmail.com', password: 'password' }, { id: 721124, image: '/images/avatars/will-smith.jpg', name: 'Will Smith', username: 'bigwillystyle', email: 'bigwill@gmail.com', password: 'f222' }];
+    var users = exports.users = [{
+        id: 34234,
+        image: '/images/avatars/big-pete-wrigley.jpg',
+        name: 'Big Pete Wrigley',
+        username: 'petewrigley',
+        email: 'bigpete@gmail.com',
+        password: 'superhardpassword123',
+        permissions: ['super-admin']
+    }, {
+        id: 938493,
+        image: '/images/avatars/tina-carlyle.jpg',
+        name: 'Tina Carlyle',
+        username: 'tina',
+        email: 'tina.carlyle@gmail.com',
+        password: 'ysoserious?',
+        permissions: ['create', 'read', 'edit-pending-approval']
+    }, {
+        id: 991,
+        image: '/images/avatars/tre-styles.jpg',
+        name: 'Tre Styles',
+        username: 'trestyles123',
+        email: 'trestylessuperfly@gmail.com',
+        password: 'toomuchmoneytocount',
+        permissions: ['read']
+    }, {
+        id: 1,
+        image: '/images/avatars/cameron-frye.jpg',
+        name: 'Cameron Frye',
+        username: 'cameron',
+        email: 'cameronfrye@frye.com',
+        password: 'kjfkjkdjf',
+        permissions: ['create', 'read']
+    }, {
+        id: 42,
+        image: '/images/avatars/stoney-brown.jpg',
+        name: 'Stoney Brown',
+        username: 'stoney',
+        email: 'stoney@gmail.com',
+        password: 'password',
+        permissions: ['read', 'edit-pending-approval']
+    }, {
+        id: 721124,
+        image: '/images/avatars/will-smith.jpg',
+        name: 'Will Smith',
+        username: 'bigwillystyle',
+        email: 'bigwill@gmail.com',
+        password: 'f222',
+        permissions: ['read']
+    }];
 
     var Api = exports.Api = function () {
         function Api() {
@@ -123,7 +171,7 @@ define('services/api',['exports', 'aurelia-framework', 'aurelia-fetch-client'], 
 
         Api.prototype.deleteUser = function deleteUser(id) {
             return new Promise(function (resolve, reject) {
-                users = users.filter(function (user) {
+                exports.users = users = users.filter(function (user) {
                     return user.id !== id;
                 });
                 resolve(users);
@@ -313,6 +361,7 @@ define('views/dashboard/users/view',['exports', 'aurelia-framework', '../../../s
 
             this.editMode = false;
             this.user = {};
+            this.clonedUser = {};
         }
 
         View.prototype.canActivate = function canActivate(params) {
@@ -321,6 +370,8 @@ define('views/dashboard/users/view',['exports', 'aurelia-framework', '../../../s
             if (params.id) {
                 return this.api.getUser(params.id).then(function (user) {
                     return _this.user = user[0];
+                }).then(function () {
+                    _this.clonedUser = JSON.parse(JSON.stringify(_this.user));
                 });
             }
 
@@ -329,6 +380,11 @@ define('views/dashboard/users/view',['exports', 'aurelia-framework', '../../../s
 
         View.prototype.toggleEditMode = function toggleEditMode() {
             this.editMode = !this.editMode;
+            this.cancelChanges();
+        };
+
+        View.prototype.cancelChanges = function cancelChanges() {
+            this.user = JSON.parse(JSON.stringify(this.clonedUser));
         };
 
         View.prototype.triggerAvatarChange = function triggerAvatarChange() {};
@@ -362,22 +418,59 @@ define('views/dashboard/users/view',['exports', 'aurelia-framework', '../../../s
         }
     })), _class2)) || _class);
 });
-define('services/user',["exports"], function (exports) {
-  "use strict";
+define('services/user',['exports', './api'], function (exports, _api) {
+    'use strict';
 
-  Object.defineProperty(exports, "__esModule", {
-    value: true
-  });
+    Object.defineProperty(exports, "__esModule", {
+        value: true
+    });
+    exports.User = undefined;
 
-  function _classCallCheck(instance, Constructor) {
-    if (!(instance instanceof Constructor)) {
-      throw new TypeError("Cannot call a class as a function");
+    function _classCallCheck(instance, Constructor) {
+        if (!(instance instanceof Constructor)) {
+            throw new TypeError("Cannot call a class as a function");
+        }
     }
-  }
 
-  var User = exports.User = function User() {
-    _classCallCheck(this, User);
-  };
+    var User = exports.User = function () {
+        function User() {
+            _classCallCheck(this, User);
+
+            this.loggedIn = false;
+            this.currentUser = {};
+        }
+
+        User.prototype.login = function login(username, password) {
+            var _this = this;
+
+            return new Promise(function (resolve, reject) {
+                _api.users.forEach(function (user) {
+                    if (user.username === username) {
+                        if (user.password === password) {
+                            _this.currentUser = user;
+                            _this.loggedIn = true;
+                            return resolve(user);
+                        }
+                    }
+                });
+
+                return reject(new Error('Credentials were invalid, please check your username and password then try again'));
+            });
+        };
+
+        User.prototype.logout = function logout() {
+            this.loggedIn = false;
+            this.currentUser = {};
+
+            return Promise.resolve();
+        };
+
+        User.prototype.userCan = function userCan(permission) {
+            return this.currentUser.permissions.includes(permission);
+        };
+
+        return User;
+    }();
 });
 define('text!app.html', ['module'], function(module) { module.exports = "<template>\n    <require from=\"./styles/admin-styles.css\"></require>\n    <router-view containerless layout-view=\"views/layouts/default.html\" layout-view-model.bind=\"{router: router}\"></router-view>\n</template>\n"; });
 define('text!views/auth/login.html', ['module'], function(module) { module.exports = "<template>\n    <div slot=\"content\">\n        <div class=\"login-background\"><img src=\"/images/background.jpg\"></div>\n\n        <div class=\"login-container\">\n            <form novalidate=\"novalidate\">\n                <div class=\"form-group form-group-default\">\n                    <label>Login</label>\n                    <div class=\"controls\">\n                        <input type=\"text\" name=\"username\" placeholder=\"Username\" class=\"form-control\" required=\"\" aria-required=\"true\" aria-invalid=\"false\" value.bind=\"username\">\n                    </div>\n                </div>\n\n                <div class=\"form-group form-group-default\">\n                    <label>Password</label>\n                    <div class=\"controls\">\n                        <input type=\"password\" class=\"form-control\" name=\"password\" placeholder=\"Password\" required=\"\" aria-required=\"true\" aria-invalid=\"false\" value.bind=\"password\">\n                    </div>\n                </div>\n\n                <div class=\"row\">\n                    <div class=\"col-sm-12\">\n                        <div class=\"checkbox \">\n                            <input type=\"checkbox\" value=\"1\" id=\"rememberme\">\n                            <label for=\"rememberme\">Keep me logged in</label>\n                        </div>\n                    </div>\n                </div>\n\n                <button class=\"btn btn-primary\" type=\"submit\">Login</button>\n            </form>\n        </div>\n    </div>\n</template>\n"; });
