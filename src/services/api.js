@@ -8,9 +8,9 @@ export let users = [
         id: 34234, 
         image: '/images/avatars/big-pete-wrigley.jpg', 
         name: 'Big Pete Wrigley', 
-        username: 'petewrigley', 
+        username: 'admin', 
         email: 'bigpete@gmail.com', 
-        password: 'superhardpassword123',
+        password: 'admin',
         permissions: ['super-admin']
     },
     {
