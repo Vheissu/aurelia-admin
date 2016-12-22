@@ -1,4 +1,13 @@
+import {inject} from 'aurelia-framework';
+
+import {User} from './services/user';
+
+@inject(User)
 export class App {
+
+    constructor(user) {
+        this.user = user;
+    }
 
     configureRouter(config, router) {
         this.router = router;

@@ -1,4 +1,4 @@
-<template bindable="router">
+<template bindable="router, user">
     <nav class="navbar navbar-dark bg-primary navbar-fixed-top" role="navigation">
         <button class="navbar-toggler hidden-lg-up" type="button" data-toggle="collapse" data-target="#navbarcollapse" aria-controls="navbarcollapse" aria-expanded="false" aria-label="Toggle navigation"></button>
 
@@ -12,9 +12,8 @@
             </ul>
 
             <ul class="nav navbar-nav navbar-right">
-                <li class="loader" if.bind="router.isNavigating">
-                <i class="fa fa-spinner fa-spin fa-2x"></i>
-                </li>
+                <li show.bind="user.loggedIn"><a click.delegate="user.logout()">Logout</a></li>
+                <li class="loader" if.bind="router.isNavigating"><i class="fa fa-spinner fa-spin fa-2x"></i></li>
             </ul>
         </div>
     </nav>
