@@ -9,3 +9,17 @@
 .navbar-right {
     float: right;
 }
+
+.flash {
+    background: rgba(0, 0, 0, 0.3);
+    color: #FFF;
+    font-size: 18px;
+    font-weight: bold;
+    left: 0;
+    padding: 25px;
+    position: fixed;
+    text-align: center;
+    top: 0;
+    width: 100vw;
+    z-index: 5000;
+}

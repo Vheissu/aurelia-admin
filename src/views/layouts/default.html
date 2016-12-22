@@ -5,6 +5,8 @@
 
     <navbar router.bind="router" user.bind="user"></navbar>
 
+    <div class="flash" if.bind="flash.hasMessages">${flash.getMessage()}</div>
+
     <div class="container-fluid">
         <slot name="content"></slot>
     </div>

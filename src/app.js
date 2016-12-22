@@ -3,12 +3,14 @@ import {inject} from 'aurelia-framework';
 import {Redirect} from 'aurelia-router';
 
 import {User} from './services/user';
+import {Flash} from './services/flash';
 
-@inject(User)
+@inject(User, Flash)
 export class App {
 
-    constructor(user) {
+    constructor(user, flash) {
         this.user = user;
+        this.flash = flash;
     }
 
     configureRouter(config, router) {
