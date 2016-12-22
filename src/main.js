@@ -1,5 +1,7 @@
 import environment from './environment';
 
+import 'bootstrap';
+
 //Configure Bluebird Promises.
 Promise.config({
     longStackTraces: environment.debug,
