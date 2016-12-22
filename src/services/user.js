@@ -40,4 +40,16 @@ export class User {
     userCan(permission) {
         return this.currentUser.permissions.includes(permission);
     }
+
+    findAvatar(username) {
+        return new Promise((resolve, reject) => {
+            users.forEach(user => {
+                if (user.username === username) {
+                    return resolve(user.image);
+                }
+            });
+
+            return reject(null);
+        });
+    }
 }
