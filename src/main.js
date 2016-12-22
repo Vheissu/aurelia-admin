@@ -13,6 +13,7 @@ Promise.config({
 export function configure(aurelia) {
     aurelia.use
         .standardConfiguration()
+        .plugin('aurelia-animator-css')
         .feature('resources');
 
     if (environment.debug) {
