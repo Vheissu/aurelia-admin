@@ -19,4 +19,8 @@ export class Api {
     getUsers() {
         return Promise.resolve(users);
     }
+
+    getUser(id) {
+        return Promise.resolve(users.filter(user => user.id === Number(id)));
+    }
 }
