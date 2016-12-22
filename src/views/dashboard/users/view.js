@@ -15,11 +15,16 @@ export class View {
 
         this.editMode = false;
         this.user = {};
+        this.clonedUser = {};
     }
 
     canActivate(params) {
         if (params.id) {
-            return this.api.getUser(params.id).then(user => this.user = user[0]);
+            return this.api.getUser(params.id)
+                .then(user => this.user = user[0])
+                .then(() => {
+                    this.clonedUser = JSON.parse(JSON.stringify(this.user));
+                });
         }
 
         return new Redirect('/dashboard/users');
@@ -27,6 +32,11 @@ export class View {
 
     toggleEditMode() {
         this.editMode = !this.editMode;
+        this.cancelChanges();
+    }
+
+    cancelChanges() {
+        this.user = JSON.parse(JSON.stringify(this.clonedUser));
     }
 
     triggerAvatarChange() {
